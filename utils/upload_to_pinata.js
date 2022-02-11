@@ -30,7 +30,7 @@ function uploadFolders() {
         console.log(err);
     });
 
-    pinata.pinFromFS(`./build/${namePrefix}-images`, {}).then((result) => {
+    pinata.pinFromFS(`./build/${namePrefix}-images-no-ext`, {}).then((result) => {
         //set .env value here.
         setEnvValue('IPFS_HASH',result.IpfsHash);
         console.log(

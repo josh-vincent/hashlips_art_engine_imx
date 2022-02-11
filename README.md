@@ -22,10 +22,110 @@ As the metadata formatting is different on ImmutableX have forked this amazing p
 
 - Upload to IPFS with [Pinata] (https://www.pinata.cloud/)
 
-copy the .env-example file and rename it to `.env`
+### Update enviroment variables first.
+- copy the .env-example file and rename it to `.env`
+- fill each of the Pinata values with your apikey & secret.
+- leave the IPFS= they will be filled in automatically.
 
-fill each of the Pinata values with your apikey & secret.
-leave the IPFS= they will be filled in automatically.
+### Create & Upload Images
+run `node index.js` after installing dependencies
+run `node utils/upload_to_pinata.js` to upload to IPFS
+
+### Deploy smart contract
+Clone the imx-contracts and follow the instructions on deploying your contract.
+Copy your `Deployed Contract Address: `
+
+### Configure IMX examples
+Clone imx-examples and follow the instuctions on configuring the .env file
+Paste your `Deployed Contract Address: ` value into the .env file
+`COLLECTION_CONTRACT_ADDRESS= ` & `TOKEN_ADDRESS=`
+
+### Run the Onboarding Steps
+
+`npm run onboarding:user-registration` *after following config steps
+
+`npm run onboarding:create-project`
+Copy the Project Id and update your `.env` file
+
+#### Important*
+
+before running this step you will want to update the fields here.
+In your `../hashlips_art_engine_imx/.env` file copy `IPFS_HASH_JSON=`value
+this is the location where your json metadata was uploaded too.
+Add that to the end of `metadata_api_url` replacing the YOUR_IPFS_HASH_JSON with your hash.
+
+```js
+const params: CreateCollectionParams = {
+    name: '0xHash',
+    // description: 'ENTER_COLLECTION_DESCRIPTION (OPTIONAL)',
+    contract_address: collectionContractAddress,
+    owner_public_key: ownerPublicKey,
+    // icon_url: '',
+    metadata_api_url: 'https://gateway.pinata.cloud/ipfs/YOUR_IPFS_HASH_JSON',
+    //collection_image_url: '',
+    project_id: parseInt(projectId, 10),
+  };
+```
+
+`npm run onboarding:create-collection`
+
+The next step is also important before adding the metadata schema you have to be sure you have it right before minting as this can't change afterwards
+
+In the default example we have 15 values, 5 for the layers & 10 defaults
+
+```json
+  "name": "Your Collection #1",
+  "description": "Remember to replace this description",
+  "image": "ipfs://rasadfjkashdfas/1.png",
+  "image_url": "https://gateway.pinata.cloud/ipfs/rasadfjkashdfas/1.png",
+  "dna": "3a890x",
+  "edition": 1,
+  "date": 1644605722586,
+  "Background": "Black",
+  "Eyeball": "White",
+  "Eye color": "Green",
+  "Iris": "Small",
+  "Shine": "Shapes",
+  "Bottom lid": "Low",
+  "Top lid": "High",
+  "compiler": "IMX HashLips Art Engine"
+```
+
+#### IMX Metadata Schema
+
+In this case we need to include everything we want to be able to filter on with imx.
+so we would include.
+
+```js
+const params: AddMetadataSchemaToCollectionParams = {
+    metadata: [
+      { name: "name" },
+      { name: "description" },
+      { name: "image" },
+      { name: "image_url" },
+      { name: "edition" },
+      { name: "dna" },
+      { name: "Eyeball" },
+      { name: "Eye color" },
+      { name: "Iris" },
+      { name: "Shine" },
+      { name: "Bottom lid" },
+      { name: "Top lid" },
+      // ..add rest of schema here
+    ],
+  };
+```
+
+`npm run onboarding:add-metadata-schema`
+
+Now our Schema is all uploaded to IMX, now come the fun part bulk minting our nfts.
+
+`npm run bulk-mint -- -n 5 -w <YOUR_WALLET_ADDRESS>` make sure in .env variables your `TOKEN_ID=` starts at 1
+
+
+IMX needs the IPFS links to not have extensions like. json & .png
+
+
 
 # HashLips Art Engine 🔥
 
@@ -38,7 +138,7 @@ Create generative art by using the canvas api and node js. Before you use the ge
 If you are cloning the project then run this first, otherwise you can download the source code on the release page and skip this step.
 
 ```sh
-git clone https://github.com/HashLips/hashlips_art_engine.git
+git clone https://github.com/josh-vincent/hashlips_art_engine_imx.git
 ```
 
 Go to the root of your folder and run this command if you have yarn installed.

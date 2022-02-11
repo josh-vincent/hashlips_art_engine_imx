@@ -118,6 +118,10 @@ const saveImage = (_editionCount) => {
     `${buildDir}/${namePrefix}-images/${_editionCount}.png`,
     canvas.toBuffer("image/png")
   );
+  fs.writeFileSync(
+    `${buildDir}/${namePrefix}-images-no-ext/${_editionCount}`,
+    canvas.toBuffer("image/png")
+  );
 };
 
 const genColor = () => {
