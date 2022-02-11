@@ -20,8 +20,8 @@ To find out more please visit:
 
 As the metadata formatting is different on ImmutableX have forked this amazing project to incorporate it
 
-### Future
-- add in uploading to IPFS
+- Upload to IPFS with [Pinata] (https://www.pinata.cloud/)
+
 
 # HashLips Art Engine 🔥
 
@@ -207,6 +207,41 @@ The program will output all the images in the `build/images` directory along wit
   "image": "https://hashlips/nft/1.png",
   "edition": 1,
   "date": 1731990799975,
+  "attributes": [
+    { "trait_type": "Background", "value": "Black" },
+    { "trait_type": "Eyeball", "value": "Red" },
+    { "trait_type": "Eye color", "value": "Yellow" },
+    { "trait_type": "Iris", "value": "Small" },
+    { "trait_type": "Shine", "value": "Shapes" },
+    { "trait_type": "Bottom lid", "value": "Low" },
+    { "trait_type": "Top lid", "value": "Middle" }
+  ],
+  "compiler": "HashLips Art Engine"
+}
+```
+
+As this is different on L2 IMX if you change your `network` objcet in the `config.js` file to
+```js
+const network = NETWORK.imx;
+```
+
+The output will change too
+
+```json
+{
+  "dna": "d956cdf4e460508b5ff90c21974124f68d6edc34",
+  "name": "#1",
+  "description": "This is the description of your NFT project",
+  "image": "https://hashlips/nft/1.png",
+  "edition": 1,
+  "date": 1731990799975,
+  "Background": "Black",
+  "Eyeball": "Red",
+  "Eye color": "Yellow",
+  "Iris": "Small",
+  "Shine": "Shapes",
+  "Bottom lid": "Low",
+  "Top lid": "Middle",
   "attributes": [
     { "trait_type": "Background", "value": "Black" },
     { "trait_type": "Eyeball", "value": "Red" },
