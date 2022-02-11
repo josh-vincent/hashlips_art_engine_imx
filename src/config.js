@@ -1,13 +1,18 @@
 const basePath = process.cwd();
 const { MODE } = require(`${basePath}/constants/blend_mode.js`);
 const { NETWORK } = require(`${basePath}/constants/network.js`);
+require('dotenv').config();
 
-const network = NETWORK.eth;
+const network = NETWORK.imx;
 
 // General metadata for Ethereum
 const namePrefix = "Your Collection";
 const description = "Remember to replace this description";
-const baseUri = "ipfs://NewUriToReplace";
+const baseUri = `https://gateway.pinata.cloud/ipfs/${process.env.IPFS_HASH}`;
+const baseIPFS = `ipfs://${process.env.IPFS_HASH}`;
+
+// If using the free plan on pinata, you may run into rate limits through the http gateway.
+// You can change this by using another service or upgrading your account just be sure to update the baseUri
 
 const solanaMetadata = {
   symbol: "YC",
@@ -78,8 +83,9 @@ const background = {
   default: "#000000",
 };
 
-const extraMetadata = {};
-
+//const extraMetadata = {};
+const extraMetadata = { ens: 'jvinnie.eth' };
+const imxMetadata = {};
 const rarityDelimiter = "#";
 
 const uniqueDnaTorrance = 10000;
@@ -103,6 +109,7 @@ const preview_gif = {
 module.exports = {
   format,
   baseUri,
+  baseIPFS,
   description,
   background,
   uniqueDnaTorrance,
@@ -112,6 +119,7 @@ module.exports = {
   shuffleLayerConfigurations,
   debugLogs,
   extraMetadata,
+  imxMetadata,
   pixelFormat,
   text,
   namePrefix,

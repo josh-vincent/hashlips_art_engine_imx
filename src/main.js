@@ -8,6 +8,7 @@ const layersDir = `${basePath}/layers`;
 const {
   format,
   baseUri,
+  baseIPFS,
   description,
   background,
   uniqueDnaTorrance,
@@ -15,6 +16,7 @@ const {
   rarityDelimiter,
   shuffleLayerConfigurations,
   debugLogs,
+  imxMetadata,
   extraMetadata,
   text,
   namePrefix,
@@ -38,8 +40,9 @@ const buildSetup = () => {
     fs.rmdirSync(buildDir, { recursive: true });
   }
   fs.mkdirSync(buildDir);
-  fs.mkdirSync(`${buildDir}/json`);
-  fs.mkdirSync(`${buildDir}/images`);
+  fs.mkdirSync(`${buildDir}/${namePrefix}-json`);
+  fs.mkdirSync(`${buildDir}/${namePrefix}-json-no-ext`);
+  fs.mkdirSync(`${buildDir}/${namePrefix}-images`);
   if (gif.export) {
     fs.mkdirSync(`${buildDir}/gifs`);
   }
@@ -112,7 +115,7 @@ const layersSetup = (layersOrder) => {
 
 const saveImage = (_editionCount) => {
   fs.writeFileSync(
-    `${buildDir}/images/${_editionCount}.png`,
+    `${buildDir}/${namePrefix}-images/${_editionCount}.png`,
     canvas.toBuffer("image/png")
   );
 };
@@ -130,49 +133,75 @@ const drawBackground = () => {
 
 const addMetadata = (_dna, _edition) => {
   let dateTime = Date.now();
+
   let tempMetadata = {
     name: `${namePrefix} #${_edition}`,
     description: description,
-    image: `${baseUri}/${_edition}.png`,
+    image: `${baseIPFS}/${_edition}.png`,
     dna: sha1(_dna),
     edition: _edition,
     date: dateTime,
     ...extraMetadata,
     attributes: attributesList,
-    compiler: "HashLips Art Engine",
+    compiler: "IMX HashLips Art Engine",
   };
-  if (network == NETWORK.sol) {
-    tempMetadata = {
-      //Added metadata for solana
-      name: tempMetadata.name,
-      symbol: solanaMetadata.symbol,
-      description: tempMetadata.description,
-      //Added metadata for solana
-      seller_fee_basis_points: solanaMetadata.seller_fee_basis_points,
-      image: `${_edition}.png`,
-      //Added metadata for solana
-      external_url: solanaMetadata.external_url,
-      edition: _edition,
-      ...extraMetadata,
-      attributes: tempMetadata.attributes,
-      properties: {
-        files: [
-          {
-            uri: `${_edition}.png`,
-            type: "image/png",
-          },
-        ],
-        category: "image",
-        creators: solanaMetadata.creators,
-      },
-    };
+
+  switch(network) {
+    case NETWORK.sol:
+      // code block
+      tempMetadata = {
+        //Added metadata for solana
+        name: tempMetadata.name,
+        symbol: solanaMetadata.symbol,
+        description: tempMetadata.description,
+        //Added metadata for solana
+        seller_fee_basis_points: solanaMetadata.seller_fee_basis_points,
+        image: `${_edition}.png`,
+        //Added metadata for solana
+        external_url: solanaMetadata.external_url,
+        edition: _edition,
+        ...extraMetadata,
+        attributes: tempMetadata.attributes,
+        properties: {
+          files: [
+            {
+              uri: `${_edition}.png`,
+              type: "image/png",
+            },
+          ],
+          category: "image",
+          creators: solanaMetadata.creators,
+        },
+      };
+      metadataList.push(tempMetadata);
+      attributesList = [];
+      break;
+    case NETWORK.imx:
+      tempMetadata = {
+        name: `${namePrefix} #${_edition}`,
+        description: description,
+        image: `${baseIPFS}/${_edition}.png`,
+        image_url: `${baseUri}/${_edition}.png`,
+        dna: sha1(_dna),
+        edition: _edition,
+        date: dateTime,
+        ...imxMetadata,
+        ...extraMetadata,
+        attributes: attributesList,
+        compiler: "IMX HashLips Art Engine",
+      }
+      metadataList.push(tempMetadata);
+      attributesList = [];
+      break;
+    default:
+      metadataList.push(tempMetadata);
+      attributesList = [];
   }
-  metadataList.push(tempMetadata);
-  attributesList = [];
 };
 
 const addAttributes = (_element) => {
   let selectedElement = _element.layer.selectedElement;
+  imxMetadata[_element.layer.name] = selectedElement.name;
   attributesList.push({
     trait_type: _element.layer.name,
     value: selectedElement.name,
@@ -304,7 +333,7 @@ const createDna = (_layers) => {
 };
 
 const writeMetaData = (_data) => {
-  fs.writeFileSync(`${buildDir}/json/_metadata.json`, _data);
+  fs.writeFileSync(`${buildDir}/${namePrefix}-json/_metadata.json`, _data);
 };
 
 const saveMetaDataSingleFile = (_editionCount) => {
@@ -315,7 +344,11 @@ const saveMetaDataSingleFile = (_editionCount) => {
       )
     : null;
   fs.writeFileSync(
-    `${buildDir}/json/${_editionCount}.json`,
+    `${buildDir}/${namePrefix}-json/${_editionCount}.json`,
+    JSON.stringify(metadata, null, 2)
+  );
+  fs.writeFileSync(
+    `${buildDir}/${namePrefix}-json-no-ext/${_editionCount}`,
     JSON.stringify(metadata, null, 2)
   );
 };
@@ -428,5 +461,7 @@ const startCreating = async () => {
   }
   writeMetaData(JSON.stringify(metadataList, null, 2));
 };
+
+
 
 module.exports = { startCreating, buildSetup, getElements };

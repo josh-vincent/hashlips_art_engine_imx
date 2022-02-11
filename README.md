@@ -16,6 +16,13 @@ To find out more please visit:
 
 [ℹ️ Website](https://hashlips.online/HashLips)
 
+# Fork of Hashlips to integrate ImmutableX
+
+As the metadata formatting is different on ImmutableX have forked this amazing project to incorporate it
+
+### Future
+- add in uploading to IPFS
+
 # HashLips Art Engine 🔥
 
 ![](https://github.com/HashLips/hashlips_art_engine/blob/main/banner.png)

@@ -11,7 +11,7 @@ const {
 } = require(`${basePath}/src/config.js`);
 
 // read json data
-let rawdata = fs.readFileSync(`${basePath}/build/json/_metadata.json`);
+let rawdata = fs.readFileSync(`${basePath}/build/${namePrefix}-json/_metadata.json`);
 let data = JSON.parse(rawdata);
 
 data.forEach((item) => {
@@ -22,10 +22,15 @@ data.forEach((item) => {
   } else {
     item.name = `${namePrefix} #${item.edition}`;
     item.description = description;
-    item.image = `${baseUri}/${item.edition}.png`;
+    item.image = `${baseIPFS}/${item.edition}.png`;
+    item.image_url = `${baseUri}/${item.edition}.png`;
   }
   fs.writeFileSync(
-    `${basePath}/build/json/${item.edition}.json`,
+    `${basePath}/build/${namePrefix}-json/${item.edition}.json`,
+    JSON.stringify(item, null, 2)
+  );
+  fs.writeFileSync(
+    `${basePath}/build/${namePrefix}-json-no-ext/${item.edition}`,
     JSON.stringify(item, null, 2)
   );
 });
