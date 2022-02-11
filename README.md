@@ -22,6 +22,10 @@ As the metadata formatting is different on ImmutableX have forked this amazing p
 
 - Upload to IPFS with [Pinata] (https://www.pinata.cloud/)
 
+copy the .env-example file and rename it to `.env`
+
+fill each of the Pinata values with your apikey & secret.
+leave the IPFS= they will be filled in automatically.
 
 # HashLips Art Engine 🔥
 
@@ -185,7 +189,7 @@ const MODE = {
 };
 ```
 
-When you are ready, run the following command and your outputted art will be in the `build/images` directory and the json in the `build/json` directory:
+When you are ready, run the following command and your outputted art will be in the `build/YourProjectName-images` directory, the json in the `build/YourProjectName-json` directory & for IMX the `build/YourProjectName-json-no-ext` directory.
 
 ```sh
 npm run build

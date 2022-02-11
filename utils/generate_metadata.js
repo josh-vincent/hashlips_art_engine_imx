@@ -2,8 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const { createCanvas, loadImage } = require("canvas");
 const basePath = process.cwd();
-const buildDir = `${basePath}/build/json`;
-const inputDir = `${basePath}/build/images`;
+const buildDir = `${basePath}/build/${namePrefix}-json`;
+const inputDir = `${basePath}/build/${namePrefix}-images`;
 const {
   format,
   namePrefix,
@@ -145,6 +145,10 @@ const saveMetadata = (_loadedImageObject) => {
     attributes: tempAttributes,
     compiler: "HashLips Art Engine",
   };
+  fs.writeFileSync(
+    `${buildDir}/${shortName}.json`,
+    JSON.stringify(tempMetadata, null, 2)
+  );
   fs.writeFileSync(
     `${buildDir}/${shortName}.json`,
     JSON.stringify(tempMetadata, null, 2)

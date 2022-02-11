@@ -1,10 +1,12 @@
+const basePath = process.cwd();
 const fs = require("fs");
 const path = require("path");
 const { createCanvas, loadImage } = require("canvas");
-const basePath = process.cwd();
+const { format, pixelFormat, namePrefix } = require(`${basePath}/src/config.js`);
+
 const buildDir = `${basePath}/build/pixel_images`;
-const inputDir = `${basePath}/build/images`;
-const { format, pixelFormat } = require(`${basePath}/src/config.js`);
+const inputDir = `${basePath}/build/${namePrefix}-images`;
+
 const console = require("console");
 const canvas = createCanvas(format.width, format.height);
 const ctx = canvas.getContext("2d");

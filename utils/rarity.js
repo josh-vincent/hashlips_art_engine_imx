@@ -1,13 +1,12 @@
 const basePath = process.cwd();
 const fs = require("fs");
 const layersDir = `${basePath}/layers`;
-
-const { layerConfigurations } = require(`${basePath}/src/config.js`);
+const { layerConfigurations, namePrefix } = require(`${basePath}/src/config.js`);
 
 const { getElements } = require("../src/main.js");
 
 // read json data
-let rawdata = fs.readFileSync(`${basePath}/build/json/_metadata.json`);
+let rawdata = fs.readFileSync(`${basePath}/build/${namePrefix}-json/_metadata.json`);
 let data = JSON.parse(rawdata);
 let editionSize = data.length;
 
