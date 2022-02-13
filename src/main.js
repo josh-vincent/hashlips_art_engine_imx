@@ -43,6 +43,7 @@ const buildSetup = () => {
   fs.mkdirSync(`${buildDir}/${namePrefix}-json`);
   fs.mkdirSync(`${buildDir}/${namePrefix}-json-no-ext`);
   fs.mkdirSync(`${buildDir}/${namePrefix}-images`);
+  fs.mkdirSync(`${buildDir}/${namePrefix}-images-no-ext`);
   if (gif.export) {
     fs.mkdirSync(`${buildDir}/gifs`);
   }

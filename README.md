@@ -123,7 +123,7 @@ Now our Schema is all uploaded to IMX, now come the fun part bulk minting our nf
 `npm run bulk-mint -- -n 5 -w <YOUR_WALLET_ADDRESS>` make sure in .env variables your `TOKEN_ID=` starts at 1
 
 
-IMX needs the IPFS links to not have extensions like. json & .png
+IMX needs the IPFS links to have no extensions should end in just `\1` not including `.json` & `.png`
 
 
 
